@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+  min-width: 100vw;
 }
 
 .App-logo {
@@ -36,3 +38,23 @@
     transform: rotate(360deg);
   }
 }
+
+.login_bg {
+  background:url('./resource/login_bg2.jpg');
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+    background-size:cover;
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    padding: 14px 14px;
+}
+
+.bg_white {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.bg_clarity {
+  background-color: rgba(255, 255, 255, 0);
+}
+
+
