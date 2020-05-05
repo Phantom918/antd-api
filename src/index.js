@@ -4,8 +4,8 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-import { BrowserRouter } from "react-router-dom";
-import Reducers from "./reducers";
+import { BrowserRouter as Router } from "react-router-dom";
+import Reducers from "./utils/reducers";
 // createStore 构造 项目唯一的store, applyMiddleware用来拓展thunk 中间件
 import { createStore, applyMiddleware } from "redux";
 // 中间件，用来处理异步请求获得的数据
@@ -23,11 +23,11 @@ const store = createStore(Reducers, applyMiddleware(thunk));
 
 ReactDOM.render(
     <Provider store={store}>
-        <BrowserRouter>
+        <Router>
             <ConfigProvider locale={zhCN}>
                 <App />
             </ConfigProvider>
-        </BrowserRouter>
+        </Router>
     </Provider>,
     document.getElementById("root")
 );

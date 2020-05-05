@@ -1,23 +1,21 @@
 // 引入"react-redux"两个API中的高阶函数 connect（另一个是 Provider），用来将state绑定到Connect组件的参数上
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { passwordLogin } from "./action";
+import { loginAction } from "./actions";
 import { DatePicker, Typography, Divider, Row, Col, Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ passwordLogin }, dispatch);
-}
+const mapDispatchToProps = { loginAction };
 
 class Login extends Component {
     state = { username: "user", password: 123456 };
 
     doLogin = (values) => {
         console.log("Received values of form: ", values);
-        this.props.passwordLogin(values);
+        this.props.loginAction(values);
+        this.props.history.push('/index');
     };
     onChange = (date, dateString) => {
         console.log(date, dateString);
@@ -25,7 +23,6 @@ class Login extends Component {
 
     render() {
         // 等redux初始化已完成，在组件中绑定state就可以使用this.props访问reducer中的状态了
-        console.log(this.props.loading);
         console.log(this.props.loginInfo);
         return (
             <>
