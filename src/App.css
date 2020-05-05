@@ -15,21 +15,6 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -39,7 +24,7 @@
   }
 }
 
-.login_bg {
+.app-bg {
   background:url('./resource/login_bg2.jpg');
     background-attachment:fixed;
     background-repeat:no-repeat;
@@ -49,12 +34,16 @@
     padding: 14px 14px;
 }
 
-.bg_white {
+.bg-white {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-.bg_clarity {
+.bg-clarity {
   background-color: rgba(255, 255, 255, 0);
 }
 
+.login-form {
+  background-color: rgba(255, 255, 255, 1.0);
+  padding: 14px 18px;
+}
 

@@ -12,13 +12,21 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 // Provider 用于结合react和redux;
 import { Provider } from "react-redux";
+// antd 引入中文环境
+import zhCN from 'antd/es/locale/zh_CN';
+import { ConfigProvider } from "antd";
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('en');
 
 const store = createStore(Reducers, applyMiddleware(thunk));
 
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
-            <App />
+            <ConfigProvider locale={zhCN}>
+                <App />
+            </ConfigProvider>
         </BrowserRouter>
     </Provider>,
     document.getElementById("root")
