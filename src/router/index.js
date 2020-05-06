@@ -6,9 +6,9 @@ import Login from "../page/login/login";
 
 
 export default () => {
-    return <Switch>
+    return (<Switch>
         <Route exact path="/login" component={Login} />
         <Route path="/" component={App} />
-    </Switch>
+    </Switch>);
 }
 

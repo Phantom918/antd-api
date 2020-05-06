@@ -1,8 +1,6 @@
 import React, { PureComponent } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-
+import { Switch, Route } from "react-router-dom";
 import Index from "../page/index/index";
-import Login from "../page/login/login";
 
 class Router extends PureComponent {
     render() {
