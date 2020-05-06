@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
+import Root from "./router/index";
 import * as serviceWorker from "./serviceWorker";
 
 import { BrowserRouter as Router } from "react-router-dom";
@@ -19,13 +19,16 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('en');
 
+// 这里继续引入 `routerMiddleware` 通过 `history` 生成一个实例
+// const middleware = routerMiddleware(browserHistory)
+
 const store = createStore(Reducers, applyMiddleware(thunk));
 
 ReactDOM.render(
     <Provider store={store}>
         <Router>
             <ConfigProvider locale={zhCN}>
-                <App />
+                <Root />
             </ConfigProvider>
         </Router>
     </Provider>,

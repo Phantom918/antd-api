@@ -8,14 +8,10 @@ class Router extends PureComponent {
     render() {
         return (
             <Switch>
-                {/* 使用Redirect指定/index为默认首页 */}
-                <Route path="/" exact render={() => <Redirect to="/index" />} />
-                <Route pat="/login">
-                    <Login />
-                </Route>
-                <Route path="/index">
-                    <Index />
-                </Route>
+                 {/* 使用Redirect指定/index为默认首页 */}
+                {/*<Route path="/" exact render={() => <Redirect to="/index" />} />*/}
+                {/* <Route path="/login" component={Login} /> */}
+                <Route path="/index" component={Index} />
             </Switch>
         );
     }

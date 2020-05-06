@@ -15,8 +15,13 @@ export const loginAction = data => {
                     dispatch({
                         // 实际项目中最好将所有的 type 集中管理，可以避免重名等问题;
                         type: "PASSWORD_LOGIN_SUCCESS",
-                        loginInfo: response.data
+                        loginInfo: response.data,
+                        loginValid: true,
                     });
+                    localStorage.token = response.data.token;
+                    // localStorage.removeItem("token");// 删除
+                    // 登录成功跳转到首页
+                    data.history.push("/index");
                 } else {
                     console.log(response.data.message);
                 }
@@ -30,7 +35,8 @@ export const loginAction = data => {
                     console.log('Error', error.message);
                 }
                 dispatch({
-                    type: "PASSWORD_LOGIN_ERROR"
+                    type: "PASSWORD_LOGIN_ERROR",
+                    loginValid: false,
                 });
             });
     };

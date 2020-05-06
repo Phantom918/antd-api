@@ -10,12 +10,13 @@ const { Title } = Typography;
 const mapDispatchToProps = { loginAction };
 
 class Login extends Component {
-    state = { username: "user", password: 123456 };
-
+    state = {};
     doLogin = (values) => {
+        values.history = this.props.history;
         console.log("Received values of form: ", values);
         this.props.loginAction(values);
-        this.props.history.push('/index');
+        // 跳转到首页
+        // this.props.history.push("/index");
     };
     onChange = (date, dateString) => {
         console.log(date, dateString);
@@ -23,16 +24,15 @@ class Login extends Component {
 
     render() {
         // 等redux初始化已完成，在组件中绑定state就可以使用this.props访问reducer中的状态了
-        console.log(this.props.loginInfo);
+        console.log('渲染....');
         return (
             <>
                 <Divider orientation="center" style={{ color: "#fff", fontWeight: "bolder", fontSize: "24px" }}>
                     Welcome
                 </Divider>
-                <DatePicker onChange={this.onChange} />
                 <Row justify="space-around" align="middle">
                     <Col xs={22} sm={20} md={16} lg={12} xl={10} className="login-form">
-                        <Title> 星 辰 变 </Title>
+                        <Title> YouTube </Title>
                         <Form name="login_form" className="login-form" onFinish={this.doLogin} initialValues={{ remember: true }}>
                             <Form.Item name="username" rules={[{ required: true, message: "Please input your Username!" }]}>
                                 <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
@@ -62,6 +62,7 @@ class Login extends Component {
 
                 <Row justify="space-around" align="middle">
                     <Col xs={22} sm={20} md={16} lg={12} xl={10}>
+                        <DatePicker onChange={this.onChange} />
                         <div>账号:{this.state.username}</div>
                         <div>密码:{this.state.password}</div>
                         <div>登录信息1:{this.state.loginInfo}</div>
@@ -73,4 +74,7 @@ class Login extends Component {
     }
 }
 
-export default connect((state) => state.login, mapDispatchToProps)(Login);
+export default connect((state) => {
+    console.log("state=%o", state);
+    return state.login
+}, mapDispatchToProps)(Login);
