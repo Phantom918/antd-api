@@ -10,13 +10,14 @@ class App extends Component {
     toPage = () => {
         // 判断是否登录
         const { loginValid } = this.props;
+        console.log("判断是否登录:" + loginValid);
 
-        if (!loginValid) {
-            this.props.history.replace({ pathname: '/login' })
-        } 
-        else {
-            console.log("else。。。。。。。")
+        if (loginValid) {
+            console.log("已登陆....");
             this.props.history.replace({ pathname: '/index' })
+        } else {
+            console.log("没登陆....");
+            this.props.history.replace({ pathname: '/login' })
         }
     }
 
@@ -60,7 +61,7 @@ class App extends Component {
             <div className="App app-bg">
                 <div>公共头部</div>
                 <h1>公共菜单</h1>
-                <Pages></Pages>
+                <Pages />
             </div>
         );
     }

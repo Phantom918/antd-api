@@ -18,10 +18,10 @@ export const loginAction = data => {
                         loginInfo: response.data,
                         loginValid: true,
                     });
-                    localStorage.token = response.data.token;
+                    sessionStorage.token = response.data.token;
                     // localStorage.removeItem("token");// 删除
                     // 登录成功跳转到首页
-                    data.history.push("/index");
+                    data.history.push("/");
                 } else {
                     console.log(response.data.message);
                 }

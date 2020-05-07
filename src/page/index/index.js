@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
-import { DatePicker, Typography, Divider, Row, Col, Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+// import { DatePicker, Typography, Divider, Row, Col, Form, Input, Button, Checkbox } from "antd";
+// import { UserOutlined, LockOutlined } from "@ant-design/icons";  
 
 import { useStore, connect } from 'react-redux'
 
@@ -45,7 +45,7 @@ class Index extends PureComponent {
   render() {
     const { count } = this.state;
 
-    console.log('render');
+    console.log('index.js => render');
 
 
     return <div onClick={this.add}>{count}</div>;

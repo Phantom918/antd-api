@@ -9,7 +9,7 @@ const { Title } = Typography;
 
 const mapDispatchToProps = { loginAction };
 
-class Login extends Component {
+class Login extends Component { 
     state = {};
     doLogin = (values) => {
         values.history = this.props.history;
@@ -24,7 +24,7 @@ class Login extends Component {
 
     render() {
         // 等redux初始化已完成，在组件中绑定state就可以使用this.props访问reducer中的状态了
-        console.log('渲染....');
+        console.log('渲染....'+ this.props.loginValid);
         return (
             <>
                 <Divider orientation="center" style={{ color: "#fff", fontWeight: "bolder", fontSize: "24px" }}>
