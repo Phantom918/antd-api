@@ -21,7 +21,7 @@ export const loginAction = data => {
                     sessionStorage.token = response.data.token;
                     // localStorage.removeItem("token");// 删除
                     // 登录成功跳转到首页
-                    data.history.push("/");
+                    data.history.push("/index");
                 } else {
                     console.log(response.data.message);
                 }

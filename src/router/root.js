@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { Switch, Route } from "react-router-dom";
 import Index from "../page/index/index";
 
-class Router extends PureComponent {
+class Pages extends PureComponent {
     render() {
         return (
             <Switch>
@@ -15,4 +15,4 @@ class Router extends PureComponent {
     }
 }
 
-export default Router;
+export default Pages;

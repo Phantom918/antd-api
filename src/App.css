@@ -1,49 +1,66 @@
 .App {
-  text-align: center;
-  min-height: 100vh;
-  min-width: 100vw;
+    text-align: center;
+    min-height: 100vh;
+    min-width: 100vw;
+    background: url("./resource/login_bg.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.app-bg {
-  background:url('./resource/login_bg2.jpg');
-    background-attachment:fixed;
-    background-repeat:no-repeat;
-    background-size:cover;
-    -moz-background-size:cover;
-    -webkit-background-size:cover;
-    padding: 14px 14px;
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .bg-white {
-  background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .bg-clarity {
-  background-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0);
 }
 
+/* 登录表单 */
 .login-form {
-  background-color: rgba(255, 255, 255, 1.0);
-  padding: 14px 18px;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 14px 18px;
 }
 
+.menu-top {
+	min-height: 48px; 
+	background-Color: rgba(123,16,89, 0.2);
+}
+
+.menu-bottom {
+    display: flex;
+}
+
+/* 菜单 */
+.menu-content {
+    max-width: 240px;
+    min-height: calc(100vh - 48px);
+}
+
+/* 页面整体样式 */
+.page-content {
+    flex-grow: 1;
+    background-Color: rgba(127,23,13, 0.4);
+}

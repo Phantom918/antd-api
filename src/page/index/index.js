@@ -1,8 +1,6 @@
-import React, { PureComponent } from "react";
-// import { DatePicker, Typography, Divider, Row, Col, Form, Input, Button, Checkbox } from "antd";
-// import { UserOutlined, LockOutlined } from "@ant-design/icons";  
+import React, { Component } from "react";
 
-import { useStore, connect } from 'react-redux'
+import { useStore, connect, } from 'react-redux'
 
 // const Index = (props) => {
 
@@ -15,26 +13,18 @@ import { useStore, connect } from 'react-redux'
 //     props.history.replace({ pathname: '/login' })
 //   }
 
-
 //   return <div>首页内容</div>;
 
 // }
-class Index extends PureComponent {
+class Index extends Component {
 
   constructor() {
     super()
-
     this.state = { count: 0 }
   }
 
   componentDidMount() {
     console.log("props:%o", this.props)
-    // // 判断是否登录
-    // const { login } = this.props;
-
-    // if (!login.loginValid) {
-    //   this.props.history.replace({ pathname: '/login' })
-    // }
   }
 
   add = () => {
@@ -48,7 +38,7 @@ class Index extends PureComponent {
     console.log('index.js => render');
 
 
-    return <div onClick={this.add}>{count}</div>;
+    return <div onClick={this.add}>这里是首页{count}</div>;
   }
 }
 

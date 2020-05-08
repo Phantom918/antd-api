@@ -4,5 +4,6 @@ import { combineReducers } from "redux";
 import login from "../page/login/reducer";
 
 let Reducers = combineReducers({ login });
+console.log("调用combineReducers.....");
 
 export default Reducers;

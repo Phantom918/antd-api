@@ -1,20 +1,50 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Pages from "./router/root";
+import { Menu, Row, Col, Button } from "antd";
+import { AppstoreOutlined, MenuUnfoldOutlined, MenuFoldOutlined, PieChartOutlined, DesktopOutlined, ContainerOutlined, MailOutlined } from "@ant-design/icons";
+
 // import logo from "./logo.svg";
 import "./App.css";
 
+const { SubMenu } = Menu;
+
+
 class App extends Component {
 
+    // submenu keys of first level
+    rootSubmenuKeys = ['sub1', 'sub2'];
 
-    toPage = () => {
+    state = {
+        collapsed: false,
+        openKeys: ['sub1'],
+    };
+
+    onOpenChange = openKeys => {
+        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
+        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            this.setState({ openKeys });
+        } else {
+            this.setState({
+                openKeys: latestOpenKey ? [latestOpenKey] : [],
+            });
+        }
+    };
+
+    toggleCollapsed = () => {
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
+    };
+
+
+    onLogin = () => {
         // 判断是否登录
-        const { loginValid } = this.props;
-        console.log("判断是否登录:" + loginValid);
-
-        if (loginValid) {
+        console.log("判断是否登录:" + sessionStorage.token);
+        if (sessionStorage.token) {
             console.log("已登陆....");
             this.props.history.replace({ pathname: '/index' })
+            // this.props.history.push('/index');
         } else {
             console.log("没登陆....");
             this.props.history.replace({ pathname: '/login' })
@@ -28,7 +58,7 @@ class App extends Component {
      */
     componentDidMount() {
         console.log("componentDidMount.....");
-        this.toPage();
+        this.onLogin();
     }
 
     /**
@@ -50,24 +80,59 @@ class App extends Component {
         console.log(Location.pathname);
         console.log(prevProps.pathname);
         // if (Location.pathname !== prevProps.pathname) {
-        //     this.toPage();
+        //     this.onLogin();
         // }
     }
-
 
     // 菜单获取
     render() {
         return (
-            <div className="App app-bg">
-                <div>公共头部</div>
-                <h1>公共菜单</h1>
-                <Pages />
+            <div className="App">
+                <Row className="menu-top" justify="center" align="middle">
+                    <Col span="4" align="right">
+                        <Button type="primary" onClick={this.toggleCollapsed}>
+                            {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
+                        </Button>
+                    </Col>
+                    <Col span="20" align="right"> 张 三 </Col>
+                </Row>
+
+                <div className="menu-bottom">
+                    <Menu defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} mode="inline" theme="dark"
+                        inlineCollapsed={this.state.collapsed} openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}
+                        className="menu-content">
+                        <Menu.Item key="1" icon={<PieChartOutlined />}>
+                            Option 1
+                            </Menu.Item>
+                        <Menu.Item key="2" icon={<DesktopOutlined />}>
+                            Option 2
+                            </Menu.Item>
+                        <Menu.Item key="3" icon={<ContainerOutlined />}>
+                            Option 3
+                            </Menu.Item>
+                        <SubMenu key="sub1" icon={<MailOutlined />} title="Navigation One">
+                            <Menu.Item key="5">Option 5</Menu.Item>
+                            <Menu.Item key="6">Option 6</Menu.Item>
+                            <Menu.Item key="7">Option 7</Menu.Item>
+                            <Menu.Item key="8">Option 8</Menu.Item>
+                        </SubMenu>
+                        <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
+                            <Menu.Item key="9">Option 9</Menu.Item>
+                            <Menu.Item key="10">Option 10</Menu.Item>
+                            <SubMenu key="sub3" title="Submenu">
+                                <Menu.Item key="11">Option 11</Menu.Item>
+                                <Menu.Item key="12">Option 12</Menu.Item>
+                            </SubMenu>
+                        </SubMenu>
+                    </Menu>
+                    <div className="page-content">
+                        <Pages />
+                    </div>
+                </div>
+
             </div>
         );
     }
 }
 
-export default connect(state => {
-    console.log('app=', state);
-    return state.login
-})(App);
+export default connect(state => state.login)(App);

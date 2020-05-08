@@ -19,9 +19,6 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('en');
 
-// 这里继续引入 `routerMiddleware` 通过 `history` 生成一个实例
-// const middleware = routerMiddleware(browserHistory)
-
 const store = createStore(Reducers, applyMiddleware(thunk));
 
 ReactDOM.render(

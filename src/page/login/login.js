@@ -2,15 +2,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { loginAction } from "./actions";
-import { DatePicker, Typography, Divider, Row, Col, Form, Input, Button, Checkbox } from "antd";
+import { Typography, Divider, Row, Col, Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import '../../App.css';
 
 const { Title } = Typography;
 
 const mapDispatchToProps = { loginAction };
 
-class Login extends Component { 
-    state = {};
+class Login extends Component {
     doLogin = (values) => {
         values.history = this.props.history;
         console.log("Received values of form: ", values);
@@ -18,15 +18,12 @@ class Login extends Component {
         // 跳转到首页
         // this.props.history.push("/index");
     };
-    onChange = (date, dateString) => {
-        console.log(date, dateString);
-    }
 
     render() {
         // 等redux初始化已完成，在组件中绑定state就可以使用this.props访问reducer中的状态了
-        console.log('渲染....'+ this.props.loginValid);
+        console.log('渲染....' + this.props.loginValid);
         return (
-            <>
+            <div className="App app-bg">
                 <Divider orientation="center" style={{ color: "#fff", fontWeight: "bolder", fontSize: "24px" }}>
                     Welcome
                 </Divider>
@@ -59,22 +56,9 @@ class Login extends Component {
                         </Form>
                     </Col>
                 </Row>
-
-                <Row justify="space-around" align="middle">
-                    <Col xs={22} sm={20} md={16} lg={12} xl={10}>
-                        <DatePicker onChange={this.onChange} />
-                        <div>账号:{this.state.username}</div>
-                        <div>密码:{this.state.password}</div>
-                        <div>登录信息1:{this.state.loginInfo}</div>
-                        {/* <div>登录信息2:{this.props.loginInfo}</div> */}
-                    </Col>
-                </Row>
-            </>
+            </div>
         );
     }
 }
 
-export default connect((state) => {
-    console.log("state=%o", state);
-    return state.login
-}, mapDispatchToProps)(Login);
+export default connect((state) => state.login, mapDispatchToProps)(Login);
