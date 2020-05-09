@@ -44,23 +44,64 @@
     padding: 14px 18px;
 }
 
-.menu-top {
-	min-height: 48px; 
-	background-Color: rgba(123,16,89, 0.2);
+/* 左上角 logo */
+.menu-logo {
+    height: 42px;
+    width: 42px;
+    background: url("./resource/logo.jpg");
+    background-repeat: no-repeat;
+    background-size: 42px;
+    -moz-background-size: 42px;
+    -webkit-background-size: 42px;
+    border-radius: 5px;
+    margin: auto 16px;
 }
 
+/* 顶部菜单 */
+.menu-top {
+	min-height: 64px; 
+	background-Color: rgba(1,21,40, 0.8);
+	color: white;
+}
+
+.menu-top-left {
+    display: flex;
+    padding: 3px;
+}
+.menu-top-btn {
+    flex-grow: 1;
+    padding: 3px;
+}
+
+/* 左侧菜单 */
 .menu-bottom {
     display: flex;
 }
 
-/* 菜单 */
+/* 菜单内容 */
 .menu-content {
+    align-items: flex-start;
     max-width: 240px;
-    min-height: calc(100vh - 48px);
+    min-height: calc(100vh - 64px);
+}
+
+/* 菜单文字左对齐 */
+ul[role='menu'] li, li[role='menuitem'] div {
+    text-align: left;
 }
 
 /* 页面整体样式 */
 .page-content {
     flex-grow: 1;
-    background-Color: rgba(127,23,13, 0.4);
+    padding: 10px;
+    /* background-color: rgba(255, 255, 255, 0.7); */
 }
+
+/* 页面内容样式 */
+.page-content>div {
+    padding: 12px;
+    /* min-height: calc(100vh - 64px); */
+    background-color: rgba(255, 255, 255, 1);
+}
+
+

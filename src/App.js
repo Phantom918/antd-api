@@ -38,6 +38,7 @@ class App extends Component {
     };
 
 
+
     onLogin = () => {
         // 判断是否登录
         console.log("判断是否登录:" + sessionStorage.token);
@@ -89,10 +90,13 @@ class App extends Component {
         return (
             <div className="App">
                 <Row className="menu-top" justify="center" align="middle">
-                    <Col span="4" align="right">
-                        <Button type="primary" onClick={this.toggleCollapsed}>
-                            {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
-                        </Button>
+                    <Col span="4" className="menu-top-left">
+                        <div className="menu-logo"></div>
+                        <div className="menu-top-btn">
+                            <Button type="primary" onClick={this.toggleCollapsed}>
+                                {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
+                            </Button>
+                        </div>
                     </Col>
                     <Col span="20" align="right"> 张 三 </Col>
                 </Row>
@@ -101,15 +105,15 @@ class App extends Component {
                     <Menu defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} mode="inline" theme="dark"
                         inlineCollapsed={this.state.collapsed} openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}
                         className="menu-content">
-                        <Menu.Item key="1" icon={<PieChartOutlined />}>
-                            Option 1
-                            </Menu.Item>
-                        <Menu.Item key="2" icon={<DesktopOutlined />}>
-                            Option 2
-                            </Menu.Item>
+                        <Menu.Item key="1" icon={<PieChartOutlined />} onClick={() => this.props.history.push("/index")}>
+                            首页
+                        </Menu.Item>
+                        <Menu.Item key="2" icon={<DesktopOutlined />} onClick={() => this.props.history.push("/authority")}>
+                            权限管理
+                        </Menu.Item>
                         <Menu.Item key="3" icon={<ContainerOutlined />}>
                             Option 3
-                            </Menu.Item>
+                        </Menu.Item>
                         <SubMenu key="sub1" icon={<MailOutlined />} title="Navigation One">
                             <Menu.Item key="5">Option 5</Menu.Item>
                             <Menu.Item key="6">Option 6</Menu.Item>
