@@ -18,28 +18,28 @@ import { useStore, connect, } from 'react-redux'
 // }
 class Index extends Component {
 
-  constructor() {
-    super()
-    this.state = { count: 0 }
-  }
+	constructor() {
+		super()
+		this.state = { count: 0 }
+	}
 
-  componentDidMount() {
-    console.log("props:%o", this.props)
-  }
+	componentDidMount() {
+		console.log("props:%o", this.props)
+	}
 
-  add = () => {
-    this.setState({ count: Math.random() })
-    this.setState({ a: 'aaa' })
-  }
+	add = () => {
+		this.setState({ count: Math.random() })
+		this.setState({ a: 'aaa' })
+	}
 
-  render() {
-    const { count } = this.state;
+	render() {
+		const { count } = this.state;
 
-    console.log('index.js => render');
+		console.log('index.js => render');
 
 
-    return <div onClick={this.add}>这里是首页{count}</div>;
-  }
+		return <div onClick={this.add}>这里是首页{count}</div>;
+	}
 }
 
 export default connect(state => state)(Index);

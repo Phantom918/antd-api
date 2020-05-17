@@ -1,9 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Row, Col, Input, Button, Select, Table, Divider, Form, Space, Spin } from 'antd';
+import { Row, Col, Input, Button, Select, Table, Divider, Form, Space, Spin, Pagination } from 'antd';
+import { PlusCircleFilled, CloseCircleFilled, EditFilled } from '@ant-design/icons';
 import axios from "axios";
 import { SEX, IS_VALID } from '@/utils/utils';
+import AddUser from './addUser';
 
 const { Option } = Select;
 
@@ -13,7 +15,6 @@ const authorityDataSelector = createSelector(
 	authorityData => authorityData
 )
 
-
 /**
  * 权限管理组件
  * useContext  全局上下文，子组件都可以使用
@@ -21,14 +22,21 @@ const authorityDataSelector = createSelector(
  */
 const Authority = (props) => {
 
+	console.log("Authority props=%o", props);
+
 	const [form] = Form.useForm();
 	const [selectionType] = useState('checkbox');
 	// 获取查询结果
 	const { formData, pagination } = useSelector(authorityDataSelector);
-	console.log("formData=%o", formData);
 	const dispatch = useDispatch();
 	// 是否正在请求后台查询 
 	const [queryFlag, setQueryFlag] = useState(false);
+	// 添加用户的模态窗是否可见
+	const [visible, setVisible] = useState(false);
+
+	useEffect(() => {
+		console.log("这里是useEffect.............");
+	});
 
 	// 表格数据列定义
 	const columns = [
@@ -37,28 +45,33 @@ const Authority = (props) => {
 			title: '账号ID',
 			dataIndex: 'username',
 			render: text => <a>{text}</a>,
+			responsive: ['md'],
 		},
 		{
 			align: 'center',
 			title: '昵称',
 			dataIndex: 'nickname',
+			responsive: ['md'],
 		},
 		{
 			align: 'center',
 			title: '性别',
 			dataIndex: 'sex',
 			render: sex => SEX[sex] || '',
+			responsive: ['md'],
 		},
 		{
 			align: 'center',
 			title: '头像',
 			dataIndex: 'image',
+			responsive: ['md'],
 		},
 		{
 			align: 'center',
 			title: '状态',
 			dataIndex: 'enable',
 			render: enable => IS_VALID[enable] || '',
+			responsive: ['md'],
 		},
 	];
 
@@ -74,12 +87,11 @@ const Authority = (props) => {
 	};
 
 	const onFinish = values => {
-		queryUserMessage({...pagination, ...values});
+		queryUserMessage({ ...pagination, ...values });
 	}
 
 	// 查询用户
-	const queryUserMessage = params => {
-		console.log('开始查询: %o', params);
+	const queryUserMessage = useCallback(params => {
 		setQueryFlag(true);
 		axios.get("/server/auth/getUsersInfo", {
 			headers: { 'Authorization': sessionStorage.token },
@@ -88,39 +100,51 @@ const Authority = (props) => {
 			// response  包含 data、status、statusText、headers、config
 			console.info("服务器返回: %o", response);
 			if (response.status === 200) {
-				console.info("准备渲染1");
 				dispatch({
 					// 实际项目中最好将所有的 type 集中管理，可以避免重名等问题;
 					type: "AUTHORITY_DATA_SUCCESS",
 					data: response.data,
 				});
-				console.info("准备渲染1。。。。end");
 			} else {
 				console.log(response.data.message);
 			}
 			setQueryFlag(false);
 		}).catch(error => {
-			// setQueryFlag(false);
+			setQueryFlag(false);
 			if (error.response) {
-				// 请求已发出，但服务器响应的状态码不在 2xx 范围内
-				console.log(error.response.status);// 403
 				console.log(error.response.data);// {message: "无效Token, 请认证后操作 !", status: 403}
+				// 请求已发出，但服务器响应的状态码不在 2xx 范围内
+				if (error.response.data && error.response.data.status === 403) {
+					sessionStorage.removeItem("token");
+					console.error(error.response.data.message);
+					props.history.replace("/login")
+				}
 			} else {
 				console.log('Error', error.message);
 			}
 		});
-	};
+	}, []);
 
 	// 重置表单
 	const onReset = () => {
 		form.resetFields();
 	};
 
+	/* 自带分页组件查询 */
 	const handleTableChange = (pagination, filters, sorter) => {
 		console.info("分页变动");
 		console.info(pagination);
-		queryUserMessage({...pagination, ...form.getFieldsValue()});
+		queryUserMessage({ ...pagination, ...form.getFieldsValue() });
 	};
+
+	/**
+	 * 单独分页组件变动查询
+	 * @param {number} current 当前第几页
+	 * @param {number} pageSzie 每页多少条
+	 */
+	const paginationChange = (current, pageSzie) => {
+		queryUserMessage({ current: current, pageSize: pageSzie, ...form.getFieldsValue() });
+	}
 
 
 	return (<div>
@@ -148,21 +172,30 @@ const Authority = (props) => {
 						</Space>
 					</Col>
 					<Divider dashed />
+					<Col span={24} align="right" style={{ paddingBottom: "2vh" }}>
+						<Space align="end" size="small">
+							<Button type="primary" icon={<PlusCircleFilled />} size='middle' onClick={() => setVisible(true)}>新增</Button>
+							<Button type="primary" icon={<EditFilled />} size='middle'>编辑</Button>
+							<Button type="primary" icon={<CloseCircleFilled />} size='middle'>删除</Button>
+						</Space>
+					</Col>
 					<Col span={24}>
-						<Table size='middle'
-							columns={columns}
-							dataSource={formData}
-							pagination={pagination}
-							rowKey={record => record.id}
-							onChange={handleTableChange}
+						<Table size='middle' tableLayout="fixed" columns={columns} dataSource={formData}
+							// pagination={pagination}
+							pagination={false} rowKey={record => record.id}
+							// onChange={handleTableChange}
 							rowSelection={{ type: selectionType, ...rowSelection, }}
 						/>
+						<Col align="right" span={24} style={{ marginTop: "2vh" }}>
+							<Pagination align="right" pageSize={pagination.pageSize} onChange={paginationChange} total={pagination.total} showSizeChanger showQuickJumper showTotal={total => `共 ${total} 条`} />
+						</Col>
 					</Col>
 				</Row>
 			</Form>
 		</Spin>
+		<AddUser visible={visible} setVisible={setVisible} />
 	</div>);
 
 }
 
-export default Authority;
+export default React.memo((props) => Authority(props));
