@@ -55,33 +55,34 @@ const AddUser = (props) => {
 		}
 	};
 
+	/**
+	 * 添加用户
+	 * @param {Object} values 
+	 */
 	const addUser = values => {
-		console.info("校验通过===%o", values)
-		axios.post("/server/auth/addUser",
-			form.getFieldsValue(),
-			{ headers: { 'Authorization': sessionStorage.token } }).then(response => {
-				// response  包含 data、status、statusText、headers、config
-				console.info("服务器返回: %o", response);
-				if (response.status === 200) {
-					message.success("添加成功！");
-				} else {
-					message.warning(response.data.message);
+		axios.post("/server/auth/addUser", form.getFieldsValue(), { headers: { 'Authorization': sessionStorage.token } }).then(response => {
+			// response  包含 data、status、statusText、headers、config
+			console.info("服务器返回: %o", response);
+			if (response.status === 200) {
+				message.success("添加成功！");
+			} else {
+				message.warning(response.data.message);
+			}
+			props.setVisible(false)
+		}).catch(error => {
+			props.setVisible(false)
+			if (error.response) {
+				message.error(error.response.message);// {message: "无效Token, 请认证后操作 !", status: 403}
+				// 请求已发出，但服务器响应的状态码不在 2xx 范围内
+				if (error.response.data && error.response.data.status === 403) {
+					sessionStorage.removeItem("token");
+					console.error(error.response.data.message);
+					props.history.replace("/login")
 				}
-				props.setVisible(false)
-			}).catch(error => {
-				props.setVisible(false)
-				if (error.response) {
-					message.error(error.response.message);// {message: "无效Token, 请认证后操作 !", status: 403}
-					// 请求已发出，但服务器响应的状态码不在 2xx 范围内
-					if (error.response.data && error.response.data.status === 403) {
-						sessionStorage.removeItem("token");
-						console.error(error.response.data.message);
-						props.history.replace("/login")
-					}
-				} else {
-					console.log('Error', error.message);
-				}
-			});
+			} else {
+				console.log('Error', error.message);
+			}
+		});
 	};
 
 
