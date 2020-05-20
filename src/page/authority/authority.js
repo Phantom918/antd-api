@@ -33,6 +33,8 @@ const Authority = (props) => {
 	const [queryFlag, setQueryFlag] = useState(false);
 	// 添加用户的模态窗是否可见
 	const [visible, setVisible] = useState(false);
+	// 当前选中的记录
+	const [selectedData, setSelectedData] = useState({ selectedRowKeys: [], selectedRows: [] });
 
 	useEffect(() => {
 		console.log("这里是useEffect.............");
@@ -78,7 +80,9 @@ const Authority = (props) => {
 	// 选中记录
 	const rowSelection = {
 		onChange: (selectedRowKeys, selectedRows) => {
-			console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+			console.log(selectedRowKeys);
+			console.log(selectedRows);
+			setSelectedData({ selectedRowKeys: selectedRowKeys, selectedRows: selectedRows });
 		},
 		getCheckboxProps: record => ({
 			disabled: record.username === 'user', // Column configuration not to be checked
@@ -150,14 +154,14 @@ const Authority = (props) => {
 	return (<div>
 		<Spin spinning={queryFlag}>
 			<Form form={form} name="advanced_search" className="ant-advanced-search-form" onFinish={onFinish} initialValues={{ "enable": "" }}>
-				<Row gutter={24} justify="space-between">
+				<Row gutter={[24, 2]} justify="space-between">
 					<Col span={6}>
-						<Form.Item name="username" label="账号">
+						<Form.Item name="username" label="账号" style={{ marginBottom: 0 }}>
 							<Input placeholder="账号或昵称" />
 						</Form.Item>
 					</Col>
 					<Col span={6} align="left">
-						<Form.Item name="enable" label="状态">
+						<Form.Item name="enable" label="状态" style={{ marginBottom: 0 }}>
 							<Select size="default">
 								<Option value="">是否有效</Option>
 								<Option value={true}>是</Option>
@@ -175,7 +179,7 @@ const Authority = (props) => {
 					<Col span={24} align="right" style={{ paddingBottom: "2vh" }}>
 						<Space align="end" size="small">
 							<Button type="primary" icon={<PlusCircleFilled />} size='middle' onClick={() => setVisible(true)}>新增</Button>
-							<Button type="primary" icon={<EditFilled />} size='middle'>编辑</Button>
+							<Button type="primary" icon={<EditFilled />} size='middle' onClick={() => selectedData.selectedRows.length === 1 ? setVisible(true) : ""}>编辑</Button>
 							<Button type="primary" icon={<CloseCircleFilled />} size='middle'>删除</Button>
 						</Space>
 					</Col>
@@ -193,7 +197,7 @@ const Authority = (props) => {
 				</Row>
 			</Form>
 		</Spin>
-		<AddUser visible={visible} setVisible={setVisible} />
+		<AddUser visible={visible} setVisible={setVisible} userInfo={selectedData.selectedRows} />
 	</div>);
 
 }

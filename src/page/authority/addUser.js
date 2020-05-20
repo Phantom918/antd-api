@@ -1,12 +1,16 @@
-import React from "react";
-import { Modal, Radio, Input, message, Tooltip, Form} from 'antd';
+import React, { useEffect } from "react";
+import { Modal, Radio, Input, message, Tooltip, Form } from 'antd';
 import { QuestionCircleOutlined, UserAddOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const AddUser = (props) => {
 	const [form] = Form.useForm();
-	console.log("visible => %o", props)
 	console.log("AddUser => render .......")
+
+	useEffect(() => {
+		let userInit = Object.assign({}, { email: "", username: '', password: '', confirm: '', nickname: '', sex: '', enable: true }, props.userInfo[0]);
+		form.setFieldsValue(userInit)
+	});
 
 	/**
 	 * 添加用户
@@ -32,6 +36,14 @@ const AddUser = (props) => {
 		} else {
 			return Promise.resolve();
 		}
+	};
+
+	/**
+	 * 自定义失焦时校验
+	 * @param {Object}} e 
+	 */
+	const checkUsername1 = async (e) => {
+		console.info("sssss====" + e.target.value)
 	};
 
 	/**
@@ -85,11 +97,10 @@ const AddUser = (props) => {
 		});
 	};
 
-
 	return (
 		<div>
-			<Modal title={<span><UserAddOutlined /> 添加用户</span>} visible={props.visible} onOk={validateForm} onCancel={() => props.setVisible(false)}>
-				<Form layout="horizontal" form={form} initialValues={{ sex: 'W' }} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={addUser}>
+			<Modal title={<span><UserAddOutlined /> 添加用户</span>} visible={props.visible} onOk={validateForm} onCancel={() => props.setVisible(false)} getContainer={false} >
+				<Form layout="horizontal" form={form} initialValues={{ enable: true }} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={addUser}>
 					<Form.Item name="email" label="E-mail" hasFeedback rules={[
 						{ type: 'email', message: 'The input is not valid E-mail!' },
 						{ required: true, message: 'Please input your E-mail!' },
@@ -101,9 +112,9 @@ const AddUser = (props) => {
 						{ required: true, message: 'Please input your count!' },
 						{ min: 4, message: '最少4个字符!' },
 						{ max: 32, message: '最多32个字符!' },
-						{ validator: checkUsername }
+						// { validator: checkUsername }
 					]}>
-						<Input placeholder="input count" />
+						<Input placeholder="input count" onBlur={e => checkUsername1(e)} />
 					</Form.Item>
 					<Form.Item name="password" label="密码" hasFeedback rules={[
 						{ required: true, message: 'Please input your password!' },
@@ -138,6 +149,12 @@ const AddUser = (props) => {
 						<Radio.Group>
 							<Radio value="M">男</Radio>
 							<Radio value="W">女</Radio>
+						</Radio.Group>
+					</Form.Item>
+					<Form.Item name="enable" label="状态">
+						<Radio.Group>
+							<Radio value="true">激活</Radio>
+							<Radio value="false">禁用</Radio>
 						</Radio.Group>
 					</Form.Item>
 				</Form>

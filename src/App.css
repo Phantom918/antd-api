@@ -108,4 +108,5 @@ ul[role='menu'] li, li[role='menuitem'] div {
 .ant-modal-title > span {
 	color: rgba(5, 87, 36, 0.9);
 	font-size: 20px;
+	align-self: start;
 }
