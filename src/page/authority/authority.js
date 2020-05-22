@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Row, Col, Input, Button, Select, Table, Divider, Form, Space, Spin, Pagination } from 'antd';
+import { Row, Col, Input, Button, Select, Table, Divider, Form, Space, Spin, Pagination, message, Popconfirm } from 'antd';
 import { PlusCircleFilled, CloseCircleFilled, EditFilled } from '@ant-design/icons';
 import axios from "axios";
 import { SEX, IS_VALID } from '@/utils/utils';
@@ -25,7 +25,6 @@ const Authority = (props) => {
 	console.log("Authority props=%o", props);
 
 	const [form] = Form.useForm();
-	const [selectionType] = useState('checkbox');
 	// 获取查询结果
 	const { formData, pagination } = useSelector(authorityDataSelector);
 	const dispatch = useDispatch();
@@ -35,6 +34,8 @@ const Authority = (props) => {
 	const [visible, setVisible] = useState(false);
 	// 当前选中的记录
 	const [selectedData, setSelectedData] = useState({ selectedRowKeys: [], selectedRows: [] });
+	// 编辑和删除按钮的控制
+	const [btnOperFlag, setBtnOperFlag] = useState({ editBtnFlag: true, delBtnFlag: true });
 
 	useEffect(() => {
 		console.log("这里是useEffect.............");
@@ -42,6 +43,12 @@ const Authority = (props) => {
 
 	// 表格数据列定义
 	const columns = [
+		{
+			align: 'center',
+			title: '序号',
+			render: (text, record, index) => index + 1,
+			responsive: ['md'],
+		},
 		{
 			align: 'center',
 			title: '账号ID',
@@ -83,6 +90,7 @@ const Authority = (props) => {
 			console.log(selectedRowKeys);
 			console.log(selectedRows);
 			setSelectedData({ selectedRowKeys: selectedRowKeys, selectedRows: selectedRows });
+			setBtnOperFlag({ editBtnFlag: selectedRowKeys.length !== 1, delBtnFlag: selectedRowKeys.length === 0 })
 		},
 		getCheckboxProps: record => ({
 			disabled: record.username === 'user', // Column configuration not to be checked
@@ -96,6 +104,7 @@ const Authority = (props) => {
 
 	// 查询用户
 	const queryUserMessage = useCallback(params => {
+		setSelectedData({ selectedRowKeys: [], selectedRows: [] });
 		setQueryFlag(true);
 		axios.get("/server/auth/getUsersInfo", {
 			headers: { 'Authorization': sessionStorage.token },
@@ -151,6 +160,39 @@ const Authority = (props) => {
 	}
 
 
+	// 删除用户
+	const deleteUsers = () => {
+		// 注意： 这里如果用 callback包裹且不加条件就获取不到动态数据 => selectedData.selectedRowKeys
+		console.info("选择了1=====%o", selectedData.selectedRowKeys);
+		setQueryFlag(true);
+		axios.post("/server/auth/delUser", selectedData.selectedRowKeys, { headers: { 'Authorization': sessionStorage.token, "Content-Type": "application/json" } })
+			.then(response => {
+				// response  包含 data、status、statusText、headers、config
+				console.info("服务器返回: %o", response);
+				if (response.status === 200) {
+					message.success("操作成功！");
+				} else {
+					message.warning("操作失败!");
+					console.log(response.data.message);
+				}
+				setQueryFlag(false);
+			}).catch(error => {
+				setQueryFlag(false);
+				if (error.response) {
+					message.warning(error.response.data);
+					console.log(error.response.data);// {message: "无效Token, 请认证后操作 !", status: 403}
+					// 请求已发出，但服务器响应的状态码不在 2xx 范围内
+					if (error.response.data && error.response.data.status === 403) {
+						sessionStorage.removeItem("token");
+						console.error(error.response.data.message);
+						props.history.replace("/login")
+					}
+				} else {
+					console.log('Error', error.message);
+				}
+			});
+	};
+
 	return (<div>
 		<Spin spinning={queryFlag}>
 			<Form form={form} name="advanced_search" className="ant-advanced-search-form" onFinish={onFinish} initialValues={{ "enable": "" }}>
@@ -179,8 +221,10 @@ const Authority = (props) => {
 					<Col span={24} align="right" style={{ paddingBottom: "2vh" }}>
 						<Space align="end" size="small">
 							<Button type="primary" icon={<PlusCircleFilled />} size='middle' onClick={() => setVisible(true)}>新增</Button>
-							<Button type="primary" icon={<EditFilled />} size='middle' onClick={() => selectedData.selectedRows.length === 1 ? setVisible(true) : ""}>编辑</Button>
-							<Button type="primary" icon={<CloseCircleFilled />} size='middle'>删除</Button>
+							<Button type="primary" icon={<EditFilled />} size='middle' disabled={btnOperFlag.editBtnFlag} onClick={() => setVisible(true)}>编辑</Button>
+							<Popconfirm title="确认删除?" onConfirm={deleteUsers} okText="删除" cancelText="取消" >
+								<Button type="primary" icon={<CloseCircleFilled />} size='middle' disabled={btnOperFlag.delBtnFlag}>删除</Button>
+							</Popconfirm>
 						</Space>
 					</Col>
 					<Col span={24}>
@@ -188,7 +232,7 @@ const Authority = (props) => {
 							// pagination={pagination}
 							pagination={false} rowKey={record => record.id}
 							// onChange={handleTableChange}
-							rowSelection={{ type: selectionType, ...rowSelection, }}
+							rowSelection={{ type: 'checkbox', selectedRowKeys: selectedData.selectedRowKeys, selectedRows: selectedData.selectedRows, ...rowSelection, }}
 						/>
 						<Col align="right" span={24} style={{ marginTop: "2vh" }}>
 							<Pagination align="right" pageSize={pagination.pageSize} onChange={paginationChange} total={pagination.total} showSizeChanger showQuickJumper showTotal={total => `共 ${total} 条`} />

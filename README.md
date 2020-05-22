@@ -66,3 +66,18 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### 参考文档如下
+
+React 官方文档说明: https://zh-hans.reactjs.org/docs/hooks-reference.html#conditionally-firing-an-effect
+
+React-Redux 官方 Hooks 文档说明: http://react-china.org/t/topic/34076
+
+How to fetch data with React Hooks: https://www.robinwieruch.de/react-hooks-fetch-data
+
+antd 官方文档说明: https://ant.design/components/table-cn/#rowSelection
+
+axios 官方文档说明: http://www.axios-js.com/zh-cn/docs/
+
+CSS 选择器: https://www.w3school.com.cn/css/css_selector_child.asp
+
